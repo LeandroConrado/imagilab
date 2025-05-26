@@ -35,10 +35,14 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            // ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                \App\Filament\Widgets\UnifiedDashboard::class,
+                \App\Filament\Widgets\MonthlySalesChart::class,
+                \App\Filament\Widgets\TopProductsChart::class,
+                \App\Filament\Widgets\CustomersGrowthChart::class,
+                \App\Filament\Widgets\AccountsPayableStatusChart::class,
+                \App\Filament\Widgets\OrderStatusChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,
