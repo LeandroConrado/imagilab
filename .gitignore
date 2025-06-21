@@ -1,0 +1,17 @@
+# Dependências do Composer
+/vendor/
+composer.phar
+
+# Arquivos de configuração sensíveis
+.env
+.env.example
+
+# Logs do Sistema
+/storage/logs/*.log
+/storage/cache/twig/*.log
+
+#  Uploads e arquivos públicos
+/public/uploads/
+
+
+

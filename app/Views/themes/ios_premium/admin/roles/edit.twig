@@ -1,0 +1,23 @@
+{% extends "admin/layout.twig" %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            Editando Papel: {{ role.nome }}
+        </div>
+        <div class="card-body">
+            <form action="/admin/roles/{{ role.id }}" method="POST">
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome do Papel</label>
+                    <input type="text" class="form-control" id="nome" name="nome" value="{{ role.nome }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="descricao" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="descricao" name="descricao" rows="3">{{ role.descricao }}</textarea>
+                </div>
+                <a href="/admin/roles" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

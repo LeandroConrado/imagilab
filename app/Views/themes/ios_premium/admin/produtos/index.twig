@@ -1,0 +1,65 @@
+{% extends "admin/layout.twig" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Produtos Cadastrados</span>
+        <a href="/admin/produtos/create" class="btn btn-success btn-sm">Novo Produto</a>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Imagem</th>
+                    <th>Nome</th>
+                    <th>Preço</th>
+                    <th>Estoque</th>
+                    <th>Destaque</th>
+                    <th>Anunciado</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produto in produtos %}
+                    <tr>
+                        <td>
+                            {% if produto.imagem_principal %}
+                                <img src="{{ produto.imagem_principal }}" alt="{{ produto.nome }}" height="40">
+                            {% else %}
+                                <span class="text-muted">Sem Imagem</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ produto.nome }}<br><small class="text-muted">{{ produto.categoria_nome ?? 'Sem categoria' }}</small></td>
+                        <td>R$ {{ produto.preco|number_format(2, ',', '.') }}</td>
+                        <td>{{ produto.estoque }}</td>
+                        <td>
+                            {% if produto.destaque %}
+                                <span class="badge bg-info">Sim</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Não</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if produto.anunciar %}
+                                <span class="badge bg-success">Sim</span>
+                            {% else %}
+                                <span class="badge bg-warning">Não</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="/admin/produtos/{{ produto.id }}/edit" class="btn btn-primary btn-sm">Editar</a>
+                            <form action="/admin/produtos/{{ produto.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">Nenhum produto encontrado.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

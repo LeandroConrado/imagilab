@@ -1,0 +1,55 @@
+{% extends "admin/layout.twig" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Formas de Pagamento</h5>
+                <p class="card-text">Gerencie os meios de pagamento que serão oferecidos no checkout da loja.</p>
+                <a href="/admin/configuracoes/formas-pagamento" class="btn btn-primary">Gerenciar</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Status de Pedido</h5>
+                <p class="card-text">Gerencie os status que um pedido pode ter durante seu ciclo de vida (ex: Pendente, Pago).</p>
+                <a href="/admin/configuracoes/pedido-status" class="btn btn-primary">Gerenciar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mt-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Tipos de Frete</h5>
+                <p class="card-text">Gerencie as opções de entrega da sua loja, como Frete Grátis ou valores fixos.</p>
+                <a href="/admin/configuracoes/tipos-frete" class="btn btn-primary">Gerenciar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mt-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Condições de Pagamento</h5>
+                <p class="card-text">Gerencie os termos de pagamento a prazo, como parcelamentos em 7/15/30 dias.</p>
+                <a href="/admin/configuracoes/condicoes-pagamento" class="btn btn-primary">Gerenciar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mt-3">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Configurações Gerais</h5>
+            <p class="card-text">Gerencie o nome da loja, logos, dados da empresa e configurações de layout do site.</p>
+            <a href="/admin/configuracoes/gerais" class="btn btn-primary">Gerenciar</a>
+        </div>
+    </div>
+</div>
+
+</div>
+{% endblock %}

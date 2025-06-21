@@ -1,0 +1,71 @@
+{# Seção de Conteúdo #}
+<h5>Conteúdo do Banner</h5>
+<div class="row">
+    <div class="col-md-12 mb-3">
+        <label for="titulo" class="form-label">Título</label>
+        <input type="text" class="form-control" id="titulo" name="titulo" value="{{ banner.titulo ?? '' }}" required>
+    </div>
+    <div class="col-md-12 mb-3">
+        <label for="descricao" class="form-label">Descrição (texto que aparece sobre o banner)</label>
+        <textarea class="form-control" name="descricao" id="descricao" rows="3">{{ banner.descricao ?? '' }}</textarea>
+    </div>
+</div>
+<div class="row">
+     <div class="col-md-6 mb-3">
+        <label for="texto_botao" class="form-label">Texto do Botão (Ex: "Saiba Mais")</label>
+        <input type="text" class="form-control" id="texto_botao" name="texto_botao" value="{{ banner.texto_botao ?? '' }}">
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="link_botao" class="form-label">Link do Botão (URL de destino)</label>
+        <input type="url" class="form-control" id="link_botao" name="link_botao" value="{{ banner.link_botao ?? '' }}" placeholder="https://...">
+    </div>
+</div>
+<hr>
+
+{# Seção de Imagem e Cores #}
+<h5>Aparência</h5>
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label for="imagem_desktop" class="form-label">Imagem para Desktop (deixe em branco para não alterar)</label>
+        <input class="form-control" type="file" id="imagem_desktop" name="imagem_desktop">
+    </div>
+     <div class="col-md-6 mb-3">
+        <label for="imagem_mobile" class="form-label">Imagem para Mobile (opcional)</label>
+        <input class="form-control" type="file" id="imagem_mobile" name="imagem_mobile">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12"><p class="form-text">Caso não envie imagem, será usado um fundo com as cores abaixo.</p></div>
+    <div class="col-md-3 mb-3">
+        <label for="cor_fundo_1" class="form-label">Cor de Fundo 1</label>
+        <input type="color" class="form-control form-control-color" id="cor_fundo_1" name="cor_fundo_1" value="{{ banner.cor_fundo_1 ?? '#ffffff' }}" title="Escolha a cor">
+    </div>
+    <div class="col-md-3 mb-3">
+        <label for="cor_fundo_2" class="form-label">Cor de Fundo 2 (para gradiente)</label>
+        <input type="color" class="form-control form-control-color" id="cor_fundo_2" name="cor_fundo_2" value="{{ banner.cor_fundo_2 ?? '#ffffff' }}" title="Escolha a cor">
+    </div>
+</div>
+<hr>
+
+{# Seção de Configurações de Exibição #}
+<h5>Configurações de Exibição</h5>
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label for="data_inicio" class="form-label">Início da Vigência</label>
+        <input type="datetime-local" class="form-control" id="data_inicio" name="data_inicio" value="{{ banner.data_inicio ? banner.data_inicio|date('Y-m-d\\TH:i') : '' }}">
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="data_fim" class="form-label">Fim da Vigência</label>
+        <input type="datetime-local" class="form-control" id="data_fim" name="data_fim" value="{{ banner.data_fim ? banner.data_fim|date('Y-m-d\\TH:i') : '' }}">
+    </div>
+</div>
+<div class="mb-3">
+    <label class="form-label">Exibir nas seguintes páginas:</label>
+    <div class="form-check"><input class="form-check-input" type="checkbox" name="paginas_exibicao[]" value="home" id="page_home" {{ 'home' in banner.paginas_exibicao ? 'checked' : '' }}><label class="form-check-label" for="page_home">Página Inicial</label></div>
+    <div class="form-check"><input class="form-check-input" type="checkbox" name="paginas_exibicao[]" value="produtos" id="page_produtos" {{ 'produtos' in banner.paginas_exibicao ? 'checked' : '' }}><label class="form-check-label" for="page_produtos">Listagem de Produtos</label></div>
+    <div class="form-check"><input class="form-check-input" type="checkbox" name="paginas_exibicao[]" value="contato" id="page_contato" {{ 'contato' in banner.paginas_exibicao ? 'checked' : '' }}><label class="form-check-label" for="page_contato">Página de Contato</label></div>
+</div>
+<div class="form-check mb-3">
+    <input class="form-check-input" type="checkbox" value="1" id="ativo" name="ativo" {{ (banner.ativo ?? 1) ? 'checked' : '' }}>
+    <label class="form-check-label" for="ativo">Banner Ativo</label>
+</div>

@@ -1,0 +1,33 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Banners Cadastrados</span>
+        <a href="/admin/banners/create" class="btn btn-success btn-sm">Novo Banner</a>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr><th>Título</th><th>Vigência</th><th>Visualizações</th><th>Cliques</th><th>Status</th><th class="text-end">Ações</th></tr>
+            </thead>
+            <tbody>
+                {% for banner in banners %}
+                    <tr>
+                        <td>{{ banner.titulo }}</td>
+                        <td>{{ banner.data_inicio ? banner.data_inicio|date('d/m/Y') : 'N/A' }} a {{ banner.data_fim ? banner.data_fim|date('d/m/Y') : 'N/A' }}</td>
+                        <td>{{ banner.visualizacoes }}</td>
+                        <td>{{ banner.cliques }}</td>
+                        <td>{{ banner.ativo ? '<span class="badge bg-success">Ativo</span>' : '<span class="badge bg-warning">Inativo</span>' }}</td>
+                        <td class="text-end">
+                            <a href="/admin/banners/{{ banner.id }}/edit" class="btn btn-primary btn-sm me-2">Editar</a>
+                            <form action="/admin/banners/{{ banner.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza?');"><button type="submit" class="btn btn-danger btn-sm">Excluir</button></form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6" class="text-center">Nenhum banner encontrado.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

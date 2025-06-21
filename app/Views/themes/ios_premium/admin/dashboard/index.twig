@@ -1,0 +1,73 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+    <div class="alert alert-success" role="alert">Seja bem-vindo ao painel administrativo!</div>
+    
+    {# Cards de Métricas #}
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mb-3"><div class="card text-white bg-primary h-100"><div class="card-body"><h3>R$ {{ metricas.faturamento_total|number_format(2, ',', '.') }}</h3><p class="card-text mb-0">Faturamento Total</p></div></div></div>
+        <div class="col-lg-4 col-md-6 mb-3"><div class="card text-white bg-danger h-100"><div class="card-body"><h3>R$ {{ metricas.financeiro.a_pagar|number_format(2, ',', '.') }}</h3><p class="card-text mb-0">Contas a Pagar (Pendente)</p></div></div></div>
+        <div class="col-lg-4 col-md-6 mb-3"><div class="card text-white bg-success h-100"><div class="card-body"><h3>R$ {{ metricas.financeiro.a_receber|number_format(2, ',', '.') }}</h3><p class="card-text mb-0">Contas a Receber (Pendente)</p></div></div></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4"><div class="card mb-3"><div class="card-body"><h3>{{ metricas.total_pedidos }}</h3><p>Total de Pedidos</p></div></div></div>
+        <div class="col-md-4"><div class="card mb-3"><div class="card-body"><h3>{{ metricas.total_clientes }}</h3><p>Total de Clientes</p></div></div></div>
+        <div class="col-md-4"><div class="card mb-3"><div class="card-body"><h3>{{ metricas.total_produtos }}</h3><p>Produtos Cadastrados</p></div></div></div>
+   </div>
+    
+    <div class="row">
+        {# Gráfico de Vendas #}
+        <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-header">Vendas nos Últimos 15 Dias</div>
+                <div class="card-body"><canvas id="vendasChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+        {# Produtos Mais Vendidos #}
+        <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-header">Top 5 Produtos Mais Vendidos</div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                    {% for produto in mais_vendidos %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ produto.nome }}
+                            <span class="badge bg-primary rounded-pill">{{ produto.total_vendido }}</span>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item">Nenhuma venda registrada.</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('vendasChart');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ grafico_labels|raw }},
+            datasets: [{
+                label: 'Faturamento Diário (R$)',
+                data: {{ grafico_data|raw }},
+                fill: true,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true } },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+});
+</script>
+{% endblock %}

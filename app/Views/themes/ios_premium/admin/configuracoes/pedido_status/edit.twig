@@ -1,0 +1,28 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Editando Status de Pedido</div>
+    <div class="card-body">
+        <form action="/admin/configuracoes/pedido-status/{{ item.id }}" method="POST">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" value="{{ item.nome }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="cor_badge" class="form-label">Cor do Badge</label>
+                <select class="form-select" id="cor_badge" name="cor_badge">
+                    <option value="primary" {{ item.cor_badge == 'primary' ? 'selected' : '' }}>Azul (Primary)</option>
+                    <option value="secondary" {{ item.cor_badge == 'secondary' ? 'selected' : '' }}>Cinza (Secondary)</option>
+                    <option value="success" {{ item.cor_badge == 'success' ? 'selected' : '' }}>Verde (Success)</option>
+                    <option value="danger" {{ item.cor_badge == 'danger' ? 'selected' : '' }}>Vermelho (Danger)</option>
+                    <option value="warning" {{ item.cor_badge == 'warning' ? 'selected' : '' }}>Amarelo (Warning)</option>
+                    <option value="info" {{ item.cor_badge == 'info' ? 'selected' : '' }}>Azul Claro (Info)</option>
+                    <option value="dark" {{ item.cor_badge == 'dark' ? 'selected' : '' }}>Preto (Dark)</option>
+                </select>
+            </div>
+            <a href="/admin/configuracoes/pedido-status" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

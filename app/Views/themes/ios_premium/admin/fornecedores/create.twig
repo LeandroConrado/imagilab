@@ -1,0 +1,139 @@
+{% extends "admin/layout.twig" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">Preencha os dados do novo fornecedor</div>
+    <div class="card-body">
+        <form action="/admin/fornecedores" method="POST">
+            {# DADOS GERAIS #}
+            <h5>Dados Gerais</h5>
+            <hr>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Tipo de Pessoa</label>
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="tipo_pessoa" id="tipo_juridica" value="juridica" checked>
+                            <label class="form-check-label" for="tipo_juridica">Pessoa Jurídica</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="tipo_pessoa" id="tipo_fisica" value="fisica">
+                            <label class="form-check-label" for="tipo_fisica">Pessoa Física</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="documento" class="form-label" id="label_documento">CNPJ</label>
+                    <input type="text" class="form-control" id="documento" name="documento">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="nome" class="form-label" id="label_nome">Razão Social</label>
+                    <input type="text" class="form-control" id="nome" name="nome" required>
+                </div>
+            </div>
+            <div class="row">
+                 <div class="col-md-6 mb-3">
+                    <label for="contato_email" class="form-label">E-mail de Contato</label>
+                    <input type="email" class="form-control" id="contato_email" name="contato_email">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="contato_telefone" class="form-label">Telefone / WhatsApp</label>
+                    <input type="text" class="form-control" id="contato_telefone" name="contato_telefone">
+                </div>
+            </div>
+
+            {# ENDEREÇO #}
+            <h5 class="mt-4">Endereço</h5>
+            <hr>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label for="cep" class="form-label">CEP</label>
+                    <input type="text" class="form-control" id="cep" name="cep">
+                </div>
+                <div class="col-md-7 mb-3">
+                    <label for="logradouro" class="form-label">Logradouro</label>
+                    <input type="text" class="form-control" id="logradouro" name="logradouro">
+                </div>
+                 <div class="col-md-2 mb-3">
+                    <label for="numero" class="form-label">Número</label>
+                    <input type="text" class="form-control" id="numero" name="numero">
+                </div>
+            </div>
+             <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="complemento" class="form-label">Complemento</label>
+                    <input type="text" class="form-control" id="complemento" name="complemento">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="bairro" class="form-label">Bairro</label>
+                    <input type="text" class="form-control" id="bairro" name="bairro">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="cidade" class="form-label">Cidade</label>
+                    <input type="text" class="form-control" id="cidade" name="cidade">
+                </div>
+                <div class="col-md-1 mb-3">
+                    <label for="estado" class="form-label">UF</label>
+                    <input type="text" class="form-control" id="estado" name="estado">
+                </div>
+            </div>
+            
+            <div class="form-check mb-3 mt-3">
+                <input class="form-check-input" type="checkbox" value="1" id="status" name="status" checked>
+                <label class="form-check-label" for="status">Fornecedor Ativo</label>
+            </div>
+            
+            <a href="/admin/fornecedores" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Lógica para busca de CEP
+    const cepInput = document.getElementById('cep');
+    cepInput.addEventListener('blur', function() {
+        const cep = this.value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('logradouro').value = data.logradouro;
+                        document.getElementById('bairro').value = data.bairro;
+                        document.getElementById('cidade').value = data.localidade;
+                        document.getElementById('estado').value = data.uf;
+                        document.getElementById('numero').focus();
+                    }
+                })
+                .catch(error => console.error('Erro ao buscar CEP:', error));
+        }
+    });
+
+    // Lógica para trocar label e máscara de Documento
+    const tipoFisica = document.getElementById('tipo_fisica');
+    const tipoJuridica = document.getElementById('tipo_juridica');
+    const docInput = document.getElementById('documento');
+    const labelDoc = document.getElementById('label_documento');
+    const nomeInput = document.getElementById('nome');
+    const labelNome = document.getElementById('label_nome');
+
+    function toggleTipoPessoa() {
+        if (tipoFisica.checked) {
+            labelDoc.textContent = 'CPF';
+            labelNome.textContent = 'Nome Completo';
+            docInput.placeholder = '000.000.000-00';
+        } else {
+            labelDoc.textContent = 'CNPJ';
+            labelNome.textContent = 'Razão Social';
+            docInput.placeholder = '00.000.000/0000-00';
+        }
+    }
+    tipoFisica.addEventListener('change', toggleTipoPessoa);
+    tipoJuridica.addEventListener('change', toggleTipoPessoa);
+});
+</script>
+{% endblock %}

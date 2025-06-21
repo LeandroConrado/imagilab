@@ -1,0 +1,105 @@
+{% extends "admin/layout.twig" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="/admin/pedidos" class="btn btn-secondary">Voltar para a Lista</a>
+    
+    <div>
+        {# Botão de E-mail (dentro de um formulário POST) #}
+        <form action="/admin/pedidos/{{ pedido.id }}/send-email" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-info">Enviar por E-mail</button>
+        </form>
+
+        {# Botão de WhatsApp #}
+        <a href="{{ pedido.whatsapp_link }}" target="_blank" class="btn btn-success">Enviar por WhatsApp</a>
+        
+        {# Botão de Impressão #}
+        <button onclick="window.print()" class="btn btn-dark">Imprimir</button>
+
+        {# Botão de Atualizar #}
+        <a href="/admin/pedidos/{{ pedido.id }}/edit" class="btn btn-primary">Atualizar Status / Rastreio</a>
+    </div>
+</div>
+
+<div class="row">
+    {# Coluna Esquerda: Itens e Totais #}
+    <div class="col-md-8">
+        <div class="card mb-3">
+            <div class="card-header">Itens do Pedido</div>
+            <div class="card-body p-0">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th class="ps-3">Qtd.</th>
+                            <th>Produto</th>
+                            <th class="text-end">Preço Unit.</th>
+                            <th class="text-end pe-3">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in pedido.itens %}
+                        <tr>
+                            <td class="ps-3">{{ item.quantidade }}x</td>
+                            <td>{{ item.produto_nome }}</td>
+                            <td class="text-end">R$ {{ item.preco_unitario|number_format(2, ',', '.') }}</td>
+                            <td class="text-end pe-3">R$ {{ (item.quantidade * item.preco_unitario)|number_format(2, ',', '.') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <table class="table table-sm table-borderless mb-0">
+                     <tbody>
+                        <tr>
+                            <td class="w-75 text-end">Subtotal:</td>
+                            <td class="text-end">R$ {{ pedido.subtotal|number_format(2, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end">Frete:</td>
+                            <td class="text-end">R$ {{ pedido.valor_frete|number_format(2, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end">Desconto:</td>
+                            <td class="text-end text-danger">- R$ {{ pedido.desconto|number_format(2, ',', '.') }}</td>
+                        </tr>
+                        <tr class="fw-bold">
+                            <td class="text-end h5">Total:</td>
+                            <td class="text-end h5">R$ {{ pedido.valor_total|number_format(2, ',', '.') }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {# Coluna Direita: Detalhes, Cliente e Endereço #}
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-header">Detalhes do Pedido</div>
+            <div class="card-body">
+                <p><strong>Data:</strong> {{ pedido.created_at|date('d/m/Y H:i') }}</p>
+                <p><strong>Status:</strong> <span class="badge bg-{{ pedido.status_cor }}">{{ pedido.status_nome }}</span></p>
+                <p><strong>Pagamento:</strong> {{ pedido.forma_pagamento_nome }}</p>
+                <p class="mb-0"><strong>Rastreio:</strong> {{ pedido.codigo_rastreio ?? 'N/A' }}</p>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-header">Cliente</div>
+            <div class="card-body">
+                <p><strong>Nome:</strong> {{ pedido.cliente_nome }}</p>
+                <p><strong>Email:</strong> {{ pedido.cliente_email }}</p>
+                <p class="mb-0"><strong>Documento:</strong> {{ pedido.cliente_documento }}</p>
+            </div>
+        </div>
+         <div class="card mb-3">
+            <div class="card-header">Endereço de Entrega</div>
+            <div class="card-body">
+                <p class="mb-1">{{ pedido.endereco.logradouro }}, {{ pedido.endereco.numero }}</p>
+                <p class="mb-1">{{ pedido.endereco.bairro }}{{ pedido.endereco.complemento ? ', ' ~ pedido.endereco.complemento : '' }}</p>
+                <p class="mb-0">{{ pedido.endereco.cidade }} - {{ pedido.endereco.estado }}, {{ pedido.endereco.cep }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Atualizar Pedido #{{ pedido.codigo_pedido }}</div>
+    <div class="card-body">
+        <form action="/admin/pedidos/{{ pedido.id }}" method="POST">
+            <div class="mb-3">
+                <label for="pedido_status_id" class="form-label">Status do Pedido</label>
+                <select class="form-select" id="pedido_status_id" name="pedido_status_id">
+                    {% for status in pedido_status_lista %}
+                        <option value="{{ status.id }}" {{ pedido.pedido_status_id == status.id ? 'selected' : '' }}>{{ status.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="codigo_rastreio" class="form-label">Código de Rastreio</label>
+                <input type="text" class="form-control" id="codigo_rastreio" name="codigo_rastreio" value="{{ pedido.codigo_rastreio }}">
+            </div>
+            <a href="/admin/pedidos/{{ pedido.id }}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar Atualização</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

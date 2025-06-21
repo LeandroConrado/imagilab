@@ -1,0 +1,52 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<form action="/admin/configuracoes/gerais" method="POST" enctype="multipart/form-data">
+    <div class="card">
+        <div class="card-header">Configurações Gerais</div>
+        <div class="card-body">
+            {# SEÇÃO 1: IDENTIDADE DA LOJA #}
+            <h5>Identidade da Loja</h5>
+            <div class="row">
+                <div class="col-md-6 mb-3"><label for="site_titulo" class="form-label">Título do Site (Aba do Navegador)</label><input type="text" class="form-control" id="site_titulo" name="site_titulo" value="{{ config.site_titulo ?? '' }}"></div>
+                <div class="col-md-6 mb-3"><label for="loja_nome" class="form-label">Nome da Loja</label><input type="text" class="form-control" id="loja_nome" name="loja_nome" value="{{ config.loja_nome ?? '' }}"></div>
+            </div>
+             <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="logo_admin" class="form-label">Logo do Painel</label>
+                    <input class="form-control" type="file" name="logo_admin">
+                    {% if config.logo_admin is not empty %}<div class="mt-2 d-flex align-items-center"><img src="{{ config.logo_admin }}" height="40" class="me-3 bg-dark p-1 rounded"><div class="form-check"><input class="form-check-input" type="checkbox" name="remover_logo_admin" value="1" id="rem_logo_admin"><label class="form-check-label" for="rem_logo_admin">Remover Logo</label></div></div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="logo_frontend" class="form-label">Logo do Site</label>
+                    <input class="form-control" type="file" name="logo_frontend">
+                     {% if config.logo_frontend is not empty %}<div class="mt-2 d-flex align-items-center"><img src="{{ config.logo_frontend }}" height="40" class="me-3 bg-dark p-1 rounded"><div class="form-check"><input class="form-check-input" type="checkbox" name="remover_logo_frontend" value="1" id="rem_logo_front"><label class="form-check-label" for="rem_logo_front">Remover Logo</label></div></div>{% endif %}
+                </div>
+            </div>
+            <hr>
+
+            {# SEÇÃO 2: DADOS DA EMPRESA #}
+            <h5>Dados da Empresa (para rodapé, e-mails, etc.)</h5>
+             <div class="row">
+                <div class="col-md-4 mb-3"><label for="loja_telefone" class="form-label">Telefone</label><input type="text" class="form-control" id="loja_telefone" name="loja_telefone" value="{{ config.loja_telefone ?? '' }}"></div>
+                <div class="col-md-4 mb-3"><label for="loja_email" class="form-label">E-mail de Contato</label><input type="email" class="form-control" id="loja_email" name="loja_email" value="{{ config.loja_email ?? '' }}"></div>
+                <div class="col-md-4 mb-3"><label for="loja_cep" class="form-label">CEP</label><input type="text" class="form-control" id="loja_cep" name="loja_cep" value="{{ config.loja_cep ?? '' }}"></div>
+            </div>
+             <div class="row">
+                <div class="col-md-9 mb-3"><label for="loja_endereco" class="form-label">Endereço</label><input type="text" class="form-control" id="loja_endereco" name="loja_endereco" value="{{ config.loja_endereco ?? '' }}"></div>
+                <div class="col-md-3 mb-3"><label for="loja_cidade_estado" class="form-label">Cidade / Estado</label><input type="text" class="form-control" id="loja_cidade_estado" name="loja_cidade_estado" value="{{ config.loja_cidade_estado ?? '' }}"></div>
+            </div>
+            <hr>
+
+            {# SEÇÃO 3: LAYOUT DA HOME #}
+            <h5>Layout da Home</h5>
+            <div class="row">
+                <div class="col-md-6 mb-3"><label for="home_limite_colunas" class="form-label">Nº de Colunas de Produtos na Home</label><input type="number" class="form-control" id="home_limite_colunas" name="home_limite_colunas" value="{{ config.home_limite_colunas ?? '4' }}"></div>
+                <div class="col-md-6 mb-3"><label for="home_limite_linhas" class="form-label">Nº de Linhas de Produtos na Home</label><input type="number" class="form-control" id="home_limite_linhas" name="home_limite_linhas" value="{{ config.home_limite_linhas ?? '2' }}"></div>
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <button type="submit" class="btn btn-primary">Salvar Configurações</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

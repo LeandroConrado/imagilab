@@ -1,0 +1,8 @@
+{% extends "admin/layout.twig" %}
+
+{% block content %}
+    {% include 'admin/produtos/_form.twig' with {
+        'action_url': '/admin/produtos/' ~ produto.id,
+        'button_label': 'Salvar Alterações'
+    } %}
+{% endblock %}

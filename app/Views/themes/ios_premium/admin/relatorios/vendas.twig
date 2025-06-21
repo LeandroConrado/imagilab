@@ -1,0 +1,46 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+    {# Formulário de Filtro #}
+    <div class="card mb-4">
+        <div class="card-header">Filtrar por Período</div>
+        <div class="card-body">
+            <form method="GET">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4"><label for="data_inicio" class="form-label">Data de Início</label><input type="date" name="data_inicio" id="data_inicio" class="form-control" value="{{ data_inicio }}"></div>
+                    <div class="col-md-4"><label for="data_fim" class="form-label">Data de Fim</label><input type="date" name="data_fim" id="data_fim" class="form-control" value="{{ data_fim }}"></div>
+                    <div class="col-md-4"><button type="submit" class="btn btn-primary w-100">Filtrar</button></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {# Cards de Métricas #}
+    <div class="row mb-4">
+        <div class="col-md-4"><div class="card text-white bg-success"><div class="card-body"><h5 class="card-title">R$ {{ relatorio.metricas.faturamento_total|number_format(2, ',', '.') }}</h5><p class="card-text">Faturamento Total</p></div></div></div>
+        <div class="col-md-4"><div class="card text-white bg-info"><div class="card-body"><h5 class="card-title">{{ relatorio.metricas.total_pedidos }}</h5><p class="card-text">Total de Pedidos</p></div></div></div>
+        <div class="col-md-4"><div class="card text-white bg-secondary"><div class="card-body"><h5 class="card-title">R$ {{ relatorio.metricas.ticket_medio|number_format(2, ',', '.') }}</h5><p class="card-text">Ticket Médio</p></div></div></div>
+    </div>
+
+    {# Tabela de Detalhes #}
+    <div class="card">
+        <div class="card-header">Pedidos no Período</div>
+        <div class="card-body">
+            <table class="table table-striped table-hover align-middle">
+                <thead><tr><th>Nº Pedido</th><th>Cliente</th><th>Data</th><th>Status</th><th class="text-end">Valor</th></tr></thead>
+                <tbody>
+                    {% for pedido in relatorio.pedidos %}
+                    <tr>
+                        <td><a href="/admin/pedidos/{{ pedido.id }}"><strong>{{ pedido.codigo_pedido }}</strong></a></td>
+                        <td>{{ pedido.cliente_nome }}</td>
+                        <td>{{ pedido.created_at|date('d/m/Y H:i') }}</td>
+                        <td><span class="badge bg-{{ pedido.status_cor }}">{{ pedido.status_nome }}</span></td>
+                        <td class="text-end">R$ {{ pedido.valor_total|number_format(2, ',', '.') }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" class="text-center">Nenhum pedido encontrado para o período selecionado.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

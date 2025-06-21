@@ -1,0 +1,31 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<div class="card"><div class="card-header">Editando Tipo de Frete</div>
+<div class="card-body"><form action="/admin/configuracoes/tipos-frete/{{ item.id }}" method="POST">
+    <div class="mb-3"><label for="nome" class="form-label">Nome (Ex: Sedex, Retirada na Loja)</label><input type="text" class="form-control" id="nome" name="nome" value="{{ item.nome }}" required></div>
+    <div class="mb-3">
+        <label class="form-label">Tipo</label>
+        <div class="form-check"><input class="form-check-input" type="radio" name="tipo_valor" id="tipo_gratis" value="gratis" {{ item.tipo_valor == 'gratis' ? 'checked' : '' }}><label class="form-check-label" for="tipo_gratis">Grátis</label></div>
+        <div class="form-check"><input class="form-check-input" type="radio" name="tipo_valor" id="tipo_fixo" value="fixo" {{ item.tipo_valor == 'fixo' ? 'checked' : '' }}><label class="form-check-label" for="tipo_fixo">Valor Fixo</label></div>
+    </div>
+    <div class="mb-3" id="campo-valor" style="{{ item.tipo_valor == 'fixo' ? 'display: block;' : 'display: none;' }}"><label for="valor" class="form-label">Valor do Frete (R$)</label><input type="text" class="form-control" id="valor" name="valor" value="{{ item.valor|number_format(2, ',', '.') }}" placeholder="15,50"></div>
+    <div class="form-check mb-3"><input class="form-check-input" type="checkbox" value="1" id="ativo" name="ativo" {{ item.ativo ? 'checked' : '' }}><label class="form-check-label" for="ativo">Ativo</label></div>
+    <a href="/admin/configuracoes/tipos-frete" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+</form></div></div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function toggleValorFixo() {
+        const isFixo = document.getElementById('tipo_fixo').checked;
+        document.getElementById('campo-valor').style.display = isFixo ? 'block' : 'none';
+    }
+    document.querySelectorAll('input[name="tipo_valor"]').forEach(radio => {
+        radio.addEventListener('change', toggleValorFixo);
+    });
+    // Executa no load para o caso de edição
+    toggleValorFixo();
+});
+</script>
+{% endblock %}

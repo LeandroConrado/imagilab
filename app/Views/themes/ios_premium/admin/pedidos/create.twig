@@ -1,0 +1,206 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<form id="form-pedido" action="/admin/pedidos" method="POST">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header">Adicionar Itens ao Pedido</div>
+                <div class="card-body">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-sm-6">
+                            <label for="select-produto" class="form-label">Produto</label>
+                            <select id="select-produto" class="form-select">
+                                <option value="">Selecione um produto...</option>
+                                {% for produto in produtos %}
+                                    <option value="{{ produto.id }}" data-preco="{{ produto.preco }}" data-nome="{{ produto.nome }}">{{ produto.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                             <label for="item-quantidade" class="form-label">Qtd.</label>
+                            <input type="number" class="form-control" id="item-quantidade" value="1" min="1">
+                        </div>
+                        <div class="col-sm-4">
+                            <button type="button" id="btn-add-item" class="btn btn-info w-100">Adicionar Item</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <table class="table">
+                        <thead><tr><th>Produto</th><th>Qtd.</th><th>Preço Unit.</th><th>Subtotal</th><th></th></tr></thead>
+                        <tbody id="itens-pedido-tabela"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Frete e Desconto</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label for="tipo_frete_id" class="form-label">Opção de Frete</label>
+                            <select class="form-select" id="tipo_frete_id" name="tipo_frete_id">
+                                <option value="" data-valor="0">Selecione o frete...</option>
+                                {% for frete in tipos_frete %}
+                                    <option value="{{ frete.id }}" data-valor="{{ frete.valor ?? 0 }}">{{ frete.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="desconto" class="form-label">Desconto (R$)</label>
+                            <input type="text" class="form-control" id="desconto" name="desconto" placeholder="0,00">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Cliente e Detalhes Finais</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="cliente_id" class="form-label">Cliente</label>
+                        <select class="form-select" id="cliente_id" name="cliente_id" required>
+                             <option value="">Selecione um cliente...</option>
+                             {% for cliente in clientes %}
+                                <option value="{{ cliente.id }}" data-endereco-id="{{ cliente.endereco_id }}">{{ cliente.nome }}</option>
+                             {% endfor %}
+                        </select>
+                        <input type="hidden" name="endereco_entrega_id" id="endereco_entrega_id">
+                    </div>
+                    <div class="mb-3">
+                        <label for="forma_pagamento_id" class="form-label">Forma de Pagamento</label>
+                        <select class="form-select" id="forma_pagamento_id" name="forma_pagamento_id" required>
+                            {% for forma in formas_pagamento %}<option value="{{ forma.id }}">{{ forma.nome }}</option>{% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+    <label for="condicao_pagamento_id" class="form-label">Condição de Pagamento</label>
+    <select class="form-select" id="condicao_pagamento_id" name="condicao_pagamento_id" required>
+        {% for condicao in condicoes_pagamento %}
+            <option value="{{ condicao.id }}">{{ condicao.nome }}</option>
+        {% endfor %}
+    </select>
+</div>
+
+                    <div class="mb-3">
+                        <label for="pedido_status_id" class="form-label">Status do Pedido</label>
+                        <select class="form-select" id="pedido_status_id" name="pedido_status_id" required>
+                            {% for status in pedido_status %}<option value="{{ status.id }}">{{ status.nome }}</option>{% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <table class="table table-sm mb-0">
+                        <tbody>
+                            <tr><td class="border-0 w-75 text-end">Subtotal:</td><td class="border-0 text-end" id="resumo-subtotal">R$ 0,00</td></tr>
+                            <tr><td class="border-0 text-end">Frete:</td><td class="border-0 text-end" id="resumo-frete">R$ 0,00</td></tr>
+                            <tr><td class="border-0 text-end">Desconto:</td><td class="border-0 text-end text-danger" id="resumo-desconto">- R$ 0,00</td></tr>
+                            <tr class="fw-bold"><td class="border-0 text-end h5">Total:</td><td class="border-0 text-end h5" id="resumo-total">R$ 0,00</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-3">
+        <a href="/admin/pedidos" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-success">Finalizar Pedido</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btnAddItem = document.getElementById('btn-add-item');
+    const tabelaItens = document.getElementById('itens-pedido-tabela');
+    const selectProduto = document.getElementById('select-produto');
+    const inputQuantidade = document.getElementById('item-quantidade');
+    
+    const freteSelect = document.getElementById('tipo_frete_id');
+    const descontoInput = document.getElementById('desconto');
+
+    const resumoSubtotal = document.getElementById('resumo-subtotal');
+    const resumoFrete = document.getElementById('resumo-frete');
+    const resumoDesconto = document.getElementById('resumo-desconto');
+    const resumoTotal = document.getElementById('resumo-total');
+
+    let itemCounter = 0;
+
+    function formatCurrency(value) {
+        return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function recalcularTudo() {
+        let subtotalItens = 0;
+        tabelaItens.querySelectorAll('tr').forEach(row => {
+            const quantidade = parseFloat(row.querySelector('input[name*="[quantidade]"]').value);
+            const preco = parseFloat(row.querySelector('input[name*="[preco_unitario]"]').value);
+            subtotalItens += quantidade * preco;
+        });
+
+        const freteOption = freteSelect.options[freteSelect.selectedIndex];
+        const valorFrete = parseFloat(freteOption.dataset.valor || 0);
+        
+        const valorDescontoStr = descontoInput.value.replace(/\./g, '').replace(',', '.');
+        const valorDesconto = parseFloat(valorDescontoStr || 0);
+
+        const totalFinal = subtotalItens + valorFrete - valorDesconto;
+
+        resumoSubtotal.textContent = formatCurrency(subtotalItens);
+        resumoFrete.textContent = formatCurrency(valorFrete);
+        resumoDesconto.textContent = `- ${formatCurrency(valorDesconto)}`;
+        resumoTotal.textContent = formatCurrency(totalFinal);
+    }
+
+    btnAddItem.addEventListener('click', function() {
+        const selectedOption = selectProduto.options[selectProduto.selectedIndex];
+        if (!selectedOption.value) { alert('Por favor, selecione um produto.'); return; }
+        const produtoId = selectedOption.value;
+        const produtoNome = selectedOption.dataset.nome;
+        const produtoPreco = parseFloat(selectedOption.dataset.preco);
+        const quantidade = parseInt(inputQuantidade.value);
+        if (isNaN(quantidade) || quantidade < 1) { alert('Por favor, insira uma quantidade válida.'); return; }
+        const subtotalItem = produtoPreco * quantidade;
+
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>${produtoNome}<input type="hidden" name="itens[${itemCounter}][produto_id]" value="${produtoId}"></td>
+            <td><input type="number" name="itens[${itemCounter}][quantidade]" value="${quantidade}" class="form-control form-control-sm" style="width: 70px;" min="1"></td>
+            <td>${formatCurrency(produtoPreco)}<input type="hidden" name="itens[${itemCounter}][preco_unitario]" value="${produtoPreco}"></td>
+            <td class="item-subtotal">${formatCurrency(subtotalItem)}</td>
+            <td><button type="button" class="btn btn-danger btn-sm btn-remove-item">X</button></td>
+        `;
+        tabelaItens.appendChild(newRow);
+        itemCounter++;
+        recalcularTudo();
+    });
+
+    tabelaItens.addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-remove-item')) {
+            e.target.closest('tr').remove();
+            recalcularTudo();
+        }
+    });
+
+    tabelaItens.addEventListener('input', function(e) {
+        if (e.target.matches('input[name*="[quantidade]"]')) {
+            const row = e.target.closest('tr');
+            const quantidade = parseInt(e.target.value);
+            const preco = parseFloat(row.querySelector('input[name*="[preco_unitario]"]').value);
+            row.querySelector('.item-subtotal').textContent = formatCurrency(quantidade * preco);
+            recalcularTudo();
+        }
+    });
+    
+    document.getElementById('cliente_id').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const enderecoId = selectedOption.dataset.enderecoId || '';
+        document.getElementById('endereco_entrega_id').value = enderecoId;
+    });
+
+    freteSelect.addEventListener('change', recalcularTudo);
+    descontoInput.addEventListener('input', recalcularTudo);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,57 @@
+/* public/assets/admin/css/print.css */
+
+@media print {
+    /* Resets básicos e fontes */
+    body {
+        background-color: white !important;
+        font-family: Arial, sans-serif;
+        font-size: 12pt;
+        color: black;
+    }
+
+    /* Esconde o que não queremos imprimir */
+    .sidebar, 
+    .d-flex.justify-content-between, /* Esconde os botões de ação */
+    .btn,
+    .card-header a { /* Esconde links no cabeçalho dos cards */
+        display: none !important;
+    }
+
+    /* Ajusta a área principal para ocupar a página toda */
+    .main-content {
+        margin-left: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Remove estilos visuais desnecessários */
+    .card {
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        page-break-inside: avoid; /* Evita que o card quebre entre páginas */
+    }
+
+    .card-header {
+        background-color: #f8f9fa !important;
+        border-bottom: 1px solid #ccc !important;
+    }
+
+    /* Força a exibição de cores de fundo e texto (útil em alguns navegadores) */
+    h1, h5, strong, .badge {
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+    }
+    
+    .table {
+        width: 100%;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    /* Esconde a URL de links quando impressos */
+    a[href]:after {
+        content: none !important;
+    }
+}

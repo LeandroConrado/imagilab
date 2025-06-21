@@ -1,0 +1,23 @@
+{% extends "admin/layout.twig" %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            Cadastrar Novo Papel (Role)
+        </div>
+        <div class="card-body">
+            <form action="/admin/roles" method="POST">
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome do Papel</label>
+                    <input type="text" class="form-control" id="nome" name="nome" required>
+                </div>
+                <div class="mb-3">
+                    <label for="descricao" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+                </div>
+                <a href="/admin/roles" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Salvar Papel</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<div class="card mb-3">
+    {# ... formulário de filtro igual ao anterior ... #}
+</div>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center"><span>Lançamentos</span><a href="/admin/financeiro/lancamentos/create" class="btn btn-success btn-sm">Novo Lançamento</a></div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead><tr><th>Descrição</th><th>Cliente/Fornecedor</th><th>Valor</th><th>Status</th><th>Vencimento</th><th class="text-end">Ações</th></tr></thead>
+            <tbody>
+            {% for item in lancamentos %}
+                <tr>
+                    <td>{{ item.descricao }}</td>
+                    <td>{{ item.nome_origem ?? 'Avulso' }}</td>
+                    <td class="fw-bold {{ item.tipo == 'receber' ? 'text-success' : 'text-danger' }}">{{ item.tipo == 'pagar' ? '-' : '+' }} R$ {{ item.valor|number_format(2, ',', '.') }}</td>
+                    <td><span class="badge rounded-pill text-bg-{{ item.status == 'pago' ? 'success' : (item.status == 'pendente' ? 'secondary' : (item.status == 'atrasado' ? 'danger' : 'warning')) }}">{{ item.status|capitalize }}</span></td>
+                    <td>{{ item.data_vencimento|date('d/m/Y') }}</td>
+                    <td class="text-end"><a href="/admin/financeiro/lancamentos/{{ item.id }}/edit" class="btn btn-primary btn-sm me-2">Editar</a><form action="/admin/financeiro/lancamentos/{{ item.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza?');"><button type="submit" class="btn btn-danger btn-sm">Excluir</button></form></td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6" class="text-center">Nenhum lançamento encontrado para os filtros selecionados.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

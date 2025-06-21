@@ -1,0 +1,10 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<div class="card"><div class="card-header">Nova Condição de Pagamento</div>
+<div class="card-body"><form action="/admin/configuracoes/condicoes-pagamento" method="POST">
+    <div class="row"><div class="col-md-6 mb-3"><label for="nome" class="form-label">Nome (Ex: 7/15/21 Dias)</label><input type="text" class="form-control" id="nome" name="nome" required></div><div class="col-md-6 mb-3"><label for="numero_parcelas" class="form-label">Nº de Parcelas</label><input type="number" class="form-control" id="numero_parcelas" name="numero_parcelas" value="1" required></div></div>
+    <div class="mb-3"><label for="intervalo_dias" class="form-label">Intervalo entre parcelas (em dias, separado por vírgula)</label><input type="text" class="form-control" id="intervalo_dias" name="intervalo_dias" placeholder="Ex: 7,15,21"></div>
+    <div class="form-check mb-3"><input class="form-check-input" type="checkbox" value="1" id="ativo" name="ativo" checked><label class="form-check-label" for="ativo">Ativo</label></div>
+    <a href="/admin/configuracoes/condicoes-pagamento" class="btn btn-secondary">Cancelar</a><button type="submit" class="btn btn-primary">Salvar</button>
+</form></div></div>
+{% endblock %}

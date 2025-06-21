@@ -1,0 +1,31 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Editando Condição de Pagamento</div>
+    <div class="card-body">
+        <form action="/admin/configuracoes/condicoes-pagamento/{{ item.id }}" method="POST">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="nome" class="form-label">Nome (Ex: 7/15/21 Dias)</label>
+                    <input type="text" class="form-control" id="nome" name="nome" value="{{ item.nome }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="numero_parcelas" class="form-label">Nº de Parcelas</label>
+                    <input type="number" class="form-control" id="numero_parcelas" name="numero_parcelas" value="{{ item.numero_parcelas }}" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="intervalo_dias" class="form-label">Intervalo entre parcelas (em dias, separado por vírgula)</label>
+                <input type="text" class="form-control" id="intervalo_dias" name="intervalo_dias" value="{{ item.intervalo_dias }}" placeholder="Ex: 7,15,21 ou 30,60,90">
+                <div class="form-text">Para uma entrada + 30 dias, use: 0,30</div>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="1" id="ativo" name="ativo" {{ item.ativo ? 'checked' : '' }}>
+                <label class="form-check-label" for="ativo">Ativo</label>
+            </div>
+            <a href="/admin/configuracoes/condicoes-pagamento" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center"><span>Tipos de Frete</span><a href="/admin/configuracoes/tipos-frete/create" class="btn btn-success btn-sm">Adicionar Novo</a></div>
+    <div class="card-body">
+        <table class="table">
+            <thead><tr><th>Nome</th><th>Tipo</th><th>Valor</th><th>Status</th><th class="text-end">Ações</th></tr></thead>
+            <tbody>
+            {% for item in itens %}
+                <tr>
+                    <td>{{ item.nome }}</td>
+                    <td>{{ item.tipo_valor|capitalize }}</td>
+                    <td>{{ item.tipo_valor == 'fixo' ? 'R$ ' ~ item.valor|number_format(2, ',', '.') : 'N/A' }}</td>
+                    <td>{{ item.ativo ? '<span class="badge bg-success">Ativo</span>' : '<span class="badge bg-warning">Inativo</span>' }}</td>
+                    <td class="text-end">
+                        <a href="/admin/configuracoes/tipos-frete/{{ item.id }}/edit" class="btn btn-primary btn-sm">Editar</a>
+                        <form action="/admin/configuracoes/tipos-frete/{{ item.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza?');"><button type="submit" class="btn btn-danger btn-sm">Excluir</button></form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5" class="text-center">Nenhum item encontrado.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

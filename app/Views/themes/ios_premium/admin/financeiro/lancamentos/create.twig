@@ -1,0 +1,122 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Novo Lançamento Financeiro</div>
+    <div class="card-body">
+        <form action="/admin/financeiro/lancamentos" method="POST">
+            <!-- TIPO DE LANÇAMENTO -->
+            <div class="mb-3">
+                <label class="form-label">Tipo de Lançamento</label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="tipo" id="tipo_receber" value="receber">
+                        <label class="form-check-label" for="tipo_receber">Conta a Receber</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="tipo" id="tipo_pagar" value="pagar" checked>
+                        <label class="form-check-label" for="tipo_pagar">Conta a Pagar</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ORIGEM (CLIENTE OU FORNECEDOR) -->
+            <div id="origem_fornecedor_div" class="mb-3">
+                <label for="fornecedor_id" class="form-label">Fornecedor (Opcional)</label>
+                <select class="form-select" name="fornecedor_id">
+                    <option value="">-- Lançamento Avulso --</option>
+                    {% for f in fornecedores %}
+                        <option value="{{ f.id }}">{{ f.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div id="origem_cliente_div" class="mb-3" style="display: none;">
+                <label for="cliente_id" class="form-label">Cliente (Opcional)</label>
+                <select class="form-select" name="cliente_id">
+                    <option value="">-- Lançamento Avulso --</option>
+                    {% for c in clientes %}
+                        <option value="{{ c.id }}">{{ c.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- DESCRIÇÃO E VALOR -->
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                    <label for="descricao" class="form-label">Descrição Base</label>
+                    <input type="text" class="form-control" id="descricao" name="descricao" required>
+                    <div class="form-text">Ex: "Compra de Material Escritório". Se houver parcelas, será adicionado "(Parcela X/Y)".</div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="valor" class="form-label">Valor Total (R$)</label>
+                    <input type="text" class="form-control" id="valor" name="valor" placeholder="150,00" required>
+                </div>
+            </div>
+
+            <!-- CONDIÇÕES DE PAGAMENTO -->
+            <div class="mb-3">
+                <label for="condicao_pagamento_id" class="form-label">Condição de Pagamento</label>
+                <select class="form-select" id="condicao_pagamento_id" name="condicao_pagamento_id">
+                    <option value="">À Vista / Único</option>
+                    {% for condicao in condicoes_pagamento %}
+                        <option value="{{ condicao.id }}">{{ condicao.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- DETALHES PARA VENCIMENTO ÚNICO -->
+            <div id="vencimento_unico_div" class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="data_vencimento" class="form-label">Data de Vencimento</label>
+                    <input type="date" class="form-control" id="data_vencimento" name="data_vencimento" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="status" class="form-label">Status Inicial</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="pendente" selected>Pendente</option>
+                        <option value="pago">Pago</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="data_pagamento" class="form-label">Data de Pagamento</label>
+                    <input type="date" class="form-control" id="data_pagamento" name="data_pagamento">
+                </div>
+            </div>
+            
+            <!-- OBSERVAÇÕES E BOTÕES -->
+            <div class="mb-3">
+                <label for="observacoes" class="form-label">Observações</label>
+                <textarea class="form-control" id="observacoes" name="observacoes" rows="3"></textarea>
+            </div>
+            <a href="/admin/financeiro/lancamentos" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function toggleOrigemFields() {
+        const isReceber = document.getElementById('tipo_receber').checked;
+        document.getElementById('origem_cliente_div').style.display = isReceber ? 'block' : 'none';
+        document.getElementById('origem_fornecedor_div').style.display = isReceber ? 'none' : 'block';
+    }
+
+    document.querySelectorAll('input[name="tipo"]').forEach(radio => {
+        radio.addEventListener('change', toggleOrigemFields);
+    });
+    toggleOrigemFields(); // Executa ao carregar
+
+    function toggleVencimentoUnico() {
+        const condicaoPagamento = document.getElementById('condicao_pagamento_id');
+        const showVencimentoUnico = condicaoPagamento.value === '';
+        document.getElementById('vencimento_unico_div').style.display = showVencimentoUnico ? 'flex' : 'none';
+        document.getElementById('data_vencimento').required = showVencimentoUnico;
+    }
+    
+    document.getElementById('condicao_pagamento_id').addEventListener('change', toggleVencimentoUnico);
+    toggleVencimentoUnico(); // Executa ao carregar
+});
+</script>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "admin/layout.twig" %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Papéis (Roles) Cadastrados</span>
+            <a href="/admin/roles/create" class="btn btn-success btn-sm">Novo Papel</a>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for role in roles %}
+                        <tr>
+                            <td>{{ role.id }}</td>
+                            <td>{{ role.nome }}</td>
+                            <td>{{ role.descricao }}</td>
+                            <td class="text-end">
+                                <a href="/admin/roles/{{ role.id }}/edit" class="btn btn-primary btn-sm">Editar</a>
+                                <form action="/admin/roles/{{ role.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir este papel?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">Nenhum papel encontrado.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<div class="card"><div class="card-header">Editando Lançamento Financeiro</div>
+<div class="card-body"><form action="/admin/financeiro/lancamentos/{{ lancamento.id }}" method="POST">
+    <div class="mb-3">
+        <label class="form-label">Tipo de Lançamento</label>
+        <div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tipo" id="tipo_receber" value="receber" {{ lancamento.tipo == 'receber' ? 'checked' : '' }}>
+                <label class="form-check-label" for="tipo_receber">Conta a Receber</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="tipo" id="tipo_pagar" value="pagar" {{ lancamento.tipo == 'pagar' ? 'checked' : '' }}>
+                <label class="form-check-label" for="tipo_pagar">Conta a Pagar</label>
+            </div>
+        </div>
+    </div>
+    
+    <div id="origem_fornecedor_div" class="mb-3">
+        <label for="fornecedor_id" class="form-label">Fornecedor (Opcional)</label>
+        <select class="form-select" name="fornecedor_id">
+            <option value="">-- Lançamento Avulso --</option>
+            {% for f in fornecedores %}
+                <option value="{{ f.id }}" {{ (lancamento.origem_tipo == 'fornecedor' and lancamento.origem_id == f.id) ? 'selected' : '' }}>{{ f.nome }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div id="origem_cliente_div" class="mb-3">
+        <label for="cliente_id" class="form-label">Cliente (Opcional)</label>
+        <select class="form-select" name="cliente_id">
+            <option value="">-- Lançamento Avulso --</option>
+            {% for c in clientes %}
+                <option value="{{ c.id }}" {{ (lancamento.origem_tipo == 'cliente' and lancamento.origem_id == c.id) ? 'selected' : '' }}>{{ c.nome }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="row"><div class="col-md-8 mb-3"><label for="descricao" class="form-label">Descrição</label><input type="text" class="form-control" id="descricao" name="descricao" value="{{ lancamento.descricao }}" required></div><div class="col-md-4 mb-3"><label for="valor" class="form-label">Valor (R$)</label><input type="text" class="form-control" id="valor" name="valor" value="{{ lancamento.valor|number_format(2, ',', '.') }}" placeholder="150,00" required></div></div>
+    <div class="row"><div class="col-md-4 mb-3"><label for="data_vencimento" class="form-label">Data de Vencimento</label><input type="date" class="form-control" id="data_vencimento" name="data_vencimento" value="{{ lancamento.data_vencimento }}" required></div><div class="col-md-4 mb-3"><label for="status" class="form-label">Status</label><select class="form-select" id="status" name="status"><option value="pendente" {{ lancamento.status == 'pendente' ? 'selected' : ''}}>Pendente</option><option value="pago" {{ lancamento.status == 'pago' ? 'selected' : ''}}>Pago</option><option value="atrasado" {{ lancamento.status == 'atrasado' ? 'selected' : ''}}>Atrasado</option><option value="cancelado" {{ lancamento.status == 'cancelado' ? 'selected' : ''}}>Cancelado</option></select></div><div class="col-md-4 mb-3"><label for="data_pagamento" class="form-label">Data de Pagamento/Recebimento</label><input type="date" class="form-control" id="data_pagamento" name="data_pagamento" value="{{ lancamento.data_pagamento }}"></div></div>
+    <div class="mb-3"><label for="observacoes" class="form-label">Observações</label><textarea class="form-control" id="observacoes" name="observacoes" rows="3">{{ lancamento.observacoes }}</textarea></div>
+    <a href="/admin/financeiro/lancamentos" class="btn btn-secondary">Cancelar</a><button type="submit" class="btn btn-primary">Salvar Alterações</button>
+</form></div></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function toggleOrigemFields() {
+        const isReceber = document.getElementById('tipo_receber').checked;
+        document.getElementById('origem_cliente_div').style.display = isReceber ? 'block' : 'none';
+        document.getElementById('origem_fornecedor_div').style.display = isReceber ? 'none' : 'block';
+    }
+
+    document.querySelectorAll('input[name="tipo"]').forEach(radio => {
+        radio.addEventListener('change', toggleOrigemFields);
+    });
+
+    // Executa a função uma vez no carregamento da página para mostrar o campo correto
+    toggleOrigemFields();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "admin/layout.twig" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Usuários do Sistema</span>
+        <a href="/admin/usuarios/create" class="btn btn-success btn-sm">Novo Usuário</a>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Nível</th>
+                    <th>Status</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.nome }}</td>
+                        <td>{{ usuario.email }}</td>
+                        <td>{{ usuario.role_id == 1 ? 'Administrador' : 'Operador' }}</td>
+                        <td>
+                            {% if usuario.ativo %}
+                                <span class="badge bg-success">Ativo</span>
+                            {% else %}
+                                <span class="badge bg-warning">Inativo</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="/admin/usuarios/{{ usuario.id }}/edit" class="btn btn-primary btn-sm me-2">Editar</a>
+                            {# Impede que o usuário se auto-delete. Requer a variável auth_user passada pelo controller #}
+                            {% if usuario.id != auth_user.id %}
+                                <form action="/admin/usuarios/{{ usuario.id }}/delete" method="POST" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="5" class="text-center">Nenhum usuário encontrado.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

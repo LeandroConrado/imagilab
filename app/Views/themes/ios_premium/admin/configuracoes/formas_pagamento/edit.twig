@@ -1,0 +1,20 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Editando Forma de Pagamento</div>
+    <div class="card-body">
+        <form action="/admin/configuracoes/formas-pagamento/{{ item.id }}" method="POST">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" value="{{ item.nome }}" required>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="1" id="ativo" name="ativo" {{ item.ativo ? 'checked' : '' }}>
+                <label class="form-check-label" for="ativo">Ativo</label>
+            </div>
+            <a href="/admin/configuracoes/formas-pagamento" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

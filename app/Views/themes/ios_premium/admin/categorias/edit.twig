@@ -1,0 +1,45 @@
+{% extends "admin/layout.twig" %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            Editando a categoria: {{ categoria.nome }}
+        </div>
+        <div class="card-body">
+            <form action="/admin/categorias/{{ categoria.id }}" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Novo Nome</label>
+                    <input type="text" class="form-control" id="nome" name="nome" value="{{ categoria.nome }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="imagem" class="form-label">Imagem (deixe em branco para não alterar)</label>
+                    <input type="file" class="form-control" id="imagem" name="imagem">
+                    {% if categoria.imagem %}
+                        <div class="mt-2">
+                            <small>Imagem atual:</small><br>
+                            <img src="{{ categoria.imagem }}" alt="{{ categoria.nome }}" height="80">
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="1" id="status" name="status" {{ categoria.status ? 'checked' : '' }}>
+                    <label class="form-check-label" for="status">
+                        Ativo
+                    </label>
+                </div>
+                
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" value="1" id="destaque" name="destaque" {{ categoria.destaque ? 'checked' : '' }}>
+                    <label class="form-check-label" for="destaque">
+                        Destaque na Home
+                    </label>
+                </div>
+
+                <a href="/admin/categorias" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

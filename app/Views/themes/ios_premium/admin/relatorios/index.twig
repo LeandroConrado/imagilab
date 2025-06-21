@@ -1,0 +1,33 @@
+{% extends "admin/layout.twig" %}
+{% block content %}
+    <p>Selecione um dos relatórios abaixo para começar a análise.</p>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Relatório de Vendas</h5>
+                    <p class="card-text">Analise o faturamento, ticket médio e pedidos realizados dentro de um período específico.</p>
+                    <a href="/admin/relatorios/vendas" class="btn btn-primary">Gerar Relatório</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">Produtos Mais Vendidos</h5>
+                    <p class="card-text text-muted">(Em breve) Veja quais produtos estão saindo mais e otimize seu estoque e marketing.</p>
+                    <a href="#" class="btn btn-secondary disabled">Gerar Relatório</a>
+                </div>
+            </div>
+        </div>
+         <div class="col-md-4">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <h5 class="card-title">Relatório de Estoque Baixo</h5>
+                    <p class="card-text text-muted">(Em breve) Liste todos os produtos que atingiram o nível de estoque mínimo definido.</p>
+                    <a href="#" class="btn btn-secondary disabled">Gerar Relatório</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
