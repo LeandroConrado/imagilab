@@ -34,8 +34,7 @@ class Uploader
 
         $destinationPath = __DIR__ . '/../../public/uploads/' . trim($destinationFolder, '/');
 
-        // *** MELHORIA ADICIONADA AQUI ***
-        // Verifica se a pasta de destino existe, se não, tenta criar recursivamente.
+        // Cria a pasta de destino se não existir.
         if (!is_dir($destinationPath)) {
             if (!mkdir($destinationPath, 0775, true)) {
                 // Se não conseguir criar a pasta, lança uma exceção.
