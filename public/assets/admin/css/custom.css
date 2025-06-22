@@ -1,0 +1,130 @@
+/* public/assets/admin/css/custom.css */
+
+/* Base layout */
+body {
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    padding-top: 0;
+    background: #212529;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    text-align: center;
+    padding: 1rem;
+    border-bottom: 1px solid #495057;
+}
+
+.sidebar-header img {
+    border-radius: 8px;
+}
+
+.sidebar-header h5 {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+.sidebar-nav {
+    flex-grow: 1;
+}
+
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid #495057;
+}
+
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+/* Cards with rounded corners and shadow */
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+/* Dark theme */
+body.dark-theme {
+    background-color: #121212;
+    color: #f8f9fa;
+}
+
+body.dark-theme .sidebar {
+    background: #343a40;
+    color: #ffffff;
+}
+
+body.dark-theme .card {
+    background-color: #1e1e1e;
+    color: #f8f9fa;
+    border-color: #3a3a3a;
+}
+
+/* Hamburger menu */
+#menu-toggle {
+    display: none;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    width: 30px;
+    height: 24px;
+    z-index: 1100;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menu-toggle span {
+    display: block;
+    height: 4px;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    #menu-toggle:checked ~ .menu-toggle span:nth-child(1) {
+        transform: translateY(10px) rotate(45deg);
+    }
+    #menu-toggle:checked ~ .menu-toggle span:nth-child(2) {
+        opacity: 0;
+    }
+    #menu-toggle:checked ~ .menu-toggle span:nth-child(3) {
+        transform: translateY(-10px) rotate(-45deg);
+    }
+
+    #menu-toggle:checked ~ .sidebar {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}
