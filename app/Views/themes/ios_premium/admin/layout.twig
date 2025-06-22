@@ -11,15 +11,26 @@
         body { background-color: #f8f9fa; }
         .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: 250px; padding-top: 0; background: #212529; color: white; display: flex; flex-direction: column; }
         .sidebar-header { text-align: center; padding: 1rem; border-bottom: 1px solid #495057; }
-        .sidebar-header img { border-radius: 8px; /* Imagens arredondadas */ }
+        .sidebar-header img { border-radius: 8px; }
         .sidebar-header h5 { margin-top: 0.5rem; margin-bottom: 0; }
         .sidebar-nav { flex-grow: 1; }
         .sidebar-footer { padding: 1rem; border-top: 1px solid #495057; }
-        .main-content { margin-left: 250px; padding: 20px; }
+        .main-content { margin-left: 250px; padding: 20px; width: 100%; }
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { left: -250px; transition: left 0.3s; z-index: 1050; }
+            .sidebar.show { left: 0; }
+            .main-content { margin-left: 0; padding-top: 60px; }
+        }
     </style>
 </head>
 <body>
-<div class="sidebar">
+<nav class="navbar navbar-dark bg-dark d-md-none">
+    <div class="container-fluid">
+        <button class="btn btn-outline-light" id="sidebarToggle">Menu</button>
+    </div>
+</nav>
+<div class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <a href="/admin">
             {% if settings.logo_admin is not empty %}
@@ -53,6 +64,12 @@
         {% block content %}{% endblock %}
     </div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById('sidebarToggle').addEventListener('click', function () {
+        document.getElementById('sidebar').classList.toggle('show');
+    });
+</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>
