@@ -1,1 +1,1 @@
-# imagilab
+# ImagiLab
