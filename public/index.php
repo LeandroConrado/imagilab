@@ -30,7 +30,7 @@ if (isset($_ENV['APP_ENV']) && $_ENV['APP_ENV'] === 'development') {
         die("Erro crítico: As classes do Whoops não foram encontradas. Por favor, execute 'composer install' e 'composer dump-autoload -o' na raiz do seu projeto.");
     }
 } else {
-    die('Ambiente de produção, Whoops não ativado. (APP_ENV não é development)');
+    // Ambiente de produção: segue sem ativar o Whoops.
 }
 
 // Inclui o namespace Core\Router
