@@ -1,0 +1,135 @@
+/* === Estilo Geral da Sidebar === */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100%;
+    background-color: #111;
+    color: #fff;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    z-index: 1050;
+    box-shadow: 4px 0 16px rgba(0,0,0,0.4);
+}
+
+.sidebar.show {
+    transform: translateX(0);
+}
+
+.sidebar:not(.show) {
+    transform: translateX(-100%);
+}
+
+.sidebar-header {
+    padding: 1rem;
+    text-align: center;
+}
+
+.sidebar-header img {
+    max-width: 48px;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-header h5 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* === Botão Hamburguer === */
+.sidebar-toggle-icon {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+    background: #0d6efd;
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Aparece somente em mobile */
+@media (min-width: 992px) {
+    .sidebar {
+        transform: translateX(0) !important;
+    }
+
+    .sidebar-toggle-icon {
+        display: none !important;
+    }
+
+    .sidebar-overlay {
+        display: none !important;
+    }
+}
+
+/* === Conteúdo Principal === */
+.main-content {
+    margin-left: 260px;
+    padding: 2rem 1rem;
+    transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 991px) {
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* === Overlay no mobile === */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1040;
+}
+
+.sidebar-overlay.show {
+    display: block;
+}
+
+/* === Estilo do usuário logado === */
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.avatar-letra {
+    width: 36px;
+    height: 36px;
+    background-color: #0d6efd;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+}
+
+.user-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.1);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+}
+
+.user-button:hover {
+    background: rgba(255,255,255,0.2);
+}
